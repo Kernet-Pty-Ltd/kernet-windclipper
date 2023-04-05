@@ -1,20 +1,20 @@
 <template>
   <div
-    class="fixed bg-gray-900 cursor-pointer shadow-md flex justify-center items-center text-white rounded-full w-14 h-14 top-6 right-6  z-[10000]"
+    class="wcp-fixed wcp-bg-gray-900 wcp-cursor-pointer wcp-shadow-md wcp-flex wcp-justify-center wcp-items-center wcp-text-white wcp-rounded-full wcp-w-14 wcp-h-14 wcp-top-6 wcp-right-6  wcp-z-[10000]"
     @mouseleave="onCloseHover(false)" @click="close" @mouseover="onCloseHover(true)">
     X
   </div>
   <div id="clippboard"
-    class="absolute flex flex-col space-y-1 z-[10000] w-96 min-h-24 shadow rounded backdrop-blur bg-indigo-100 ">
+    class="wcp-absolute wcp-flex wcp-flex-col wcp-border wcp-border-indigo-300 wcp-space-y-1 wcp-z-[10000] wcp-w-96 wcp-min-h-24 wcp-shadow wcp-rounded wcp-backdrop-blur wcp-bg-indigo-500/5">
 
-    <div class="flex border-b py-3 px-6">
+    <div class="wcp-flex wcp-border-b wcp-border-indigo-300 wcp-py-3 wcp-px-6">
 
-      <p class="flex-1 font-bold">
+      <p class="wcp-flex-1 wcp-font-bold">
         {{ `<${name}>` }}
       </p>
-      <p class="text-gray-400">click to copy</p>
+      <p class="wcp-text-gray-400">click to copy</p>
     </div>
-    <div class="text-green-500 font-bold pb-3 px-6">
+    <div class="wcp-text-green-500 wcp-font-bold wcp-pb-3 wcp-px-6">
       {{ classes }}
     </div>
   </div>
@@ -27,7 +27,7 @@ const mouseX = ref(0);
 const mouseY = ref(0);
 const name = ref('');
 const classes = ref([]);
-let highlightedElement!: Element;
+let highlightedElement!: HTMLElement;
 let closeHover = false;
 let clippBoard!: HTMLElement;
 let isActive = true;
@@ -55,7 +55,7 @@ onMounted(() => {
         clippBoard.style.left = `${event.pageX + 40}px`
         clippBoard.style.top = `${event.pageY + 20}px`
 
-        const element = document.elementFromPoint(mouseX.value, mouseY.value);
+        const element = document.elementFromPoint(mouseX.value, mouseY.value) as HTMLElement;
 
         // Remove border from previously highlighted element
         if (highlightedElement && highlightedElement !== element) {
@@ -86,7 +86,9 @@ onMounted(() => {
   })
 
   // Click event outside of mousemove event handler
-  window.addEventListener('click', () => {
+  window.addEventListener('click', (event) => {
+
+    event.preventDefault();
     if (classes.value.length > 0 && isActive && !closeHover) {
       navigator.clipboard.writeText(classes.value.toString());
     }
