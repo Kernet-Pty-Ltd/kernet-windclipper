@@ -1,6 +1,6 @@
 <template>
   <div v-if="isActive"
-    class="wcp-fixed wcp-bg-gray-500  wcp-cursor-pointer wcp-shadow-md wcp-flex wcp-justify-center wcp-items-center wcp-text-white wcp-rounded p-4 iwcp-w-14 wcp-h-4 wcp-top-6 wcp-right-6  wcp-z-[10000]"
+    class="wcp-fixed wcp-bg-gray-500  wcp-cursor-pointer wcp-shadow-md wcp-flex wcp-justify-center wcp-items-center wcp-text-white wcp-rounded wcp-p-4 iwcp-w-14 wcp-h-4 wcp-top-6 wcp-right-6  wcp-z-[10000]"
     @mouseleave="onCloseHover(false)" @click="close" @mouseover="onCloseHover(true)">
     Exit windclipper
   </div>
@@ -19,11 +19,6 @@
     </div>
   </div>
 </template>
-<style>
-.wp-hidden {
-  display: none;
-}
-</style>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
@@ -55,12 +50,12 @@ const toggleEvents = (toggle = false) => {
   // Convert the HTMLCollection to an array to use forEach
   Array.from(buttons).forEach(button => {
     // Set the pointerEvents property to 'none'
-    button.style.pointerEvents = toggle ? 'all' : 'none';
+    button.style.pointerEvents = toggle ? 'auto' : 'none';
   });
 
   Array.from(links).forEach(link => {
     // Set the pointerEvents property to 'none'
-    link.style.pointerEvents = toggle ? 'all' : 'none';
+    link.style.pointerEvents = toggle ? 'auto' : 'none';
   });
 }
 
@@ -115,7 +110,6 @@ onMounted(() => {
   // Click event outside of mousemove event handler
   window.addEventListener('click', (event) => {
 
-    event.preventDefault();
     if (classes.value.length > 0 && isActive.value && !closeHover.value) {
       navigator.clipboard.writeText(classes.value.toString());
       copied.value = true
