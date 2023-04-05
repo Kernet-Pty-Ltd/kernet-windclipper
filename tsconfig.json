@@ -15,7 +15,9 @@
     ],
     "skipLibCheck": true,
     "noEmit": true,
-    "types": [],
+    "types": [
+      "chrome"
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": [
