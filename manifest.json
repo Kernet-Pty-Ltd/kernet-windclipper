@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "WindClipper",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "src/content/content.ts"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}
