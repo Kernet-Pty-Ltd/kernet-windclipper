@@ -1,11 +1,11 @@
 <template>
   <div v-if="isActive"
-    class="wcp-fixed wcp-bg-gray-500  wcp-cursor-pointer wcp-shadow-md wcp-flex wcp-justify-center wcp-items-center wcp-text-white wcp-rounded wcp-p-4 iwcp-w-14 wcp-h-4 wcp-top-6 wcp-right-6  wcp-z-[10000]"
+    class="wcp-fixed wcp-bg-gray-500 wcp-cursor-pointer wcp-shadow-md wcp-flex wcp-justify-center wcp-items-center wcp-text-white wcp-rounded wcp-p-4  wcp-h-4 wcp-top-6 wcp-right-6 wcp-z-[10000]"
     @mouseleave="onCloseHover(false)" @click="close" @mouseover="onCloseHover(true)">
     Exit windclipper
   </div>
-  <div id="clippboard"
-    class="wcp-absolute wcp-flex wcp-flex-col wcp-border wcp-border-indigo-300 wcp-space-y-1 wcp-z-[10000] wcp-w-96 wcp-min-h-24 wcp-shadow wcp-rounded wcp-backdrop-blur wcp-bg-indigo-500/5">
+  <div v-if="isActive" id="clippboard"
+    class="wcp-absolute wcp-hidden iwcp-flex wcp-flex-col wcp-border wcp-border-indigo-300 wcp-space-y-1 wcp-z-[10000] wcp-w-96 wcp-min-h-24 wcp-shadow wcp-rounded wcp-backdrop-blur wcp-bg-indigo-500/5">
 
     <div class="wcp-flex wcp-border-b wcp-border-indigo-300 wcp-py-3 wcp-px-6">
 
@@ -61,10 +61,11 @@ const toggleEvents = (toggle = false) => {
 
 onMounted(() => {
 
-  clippBoard = document.getElementById('clippboard')!;
 
   window.addEventListener('mousemove', (event) => {
     if (isActive.value && !closeHover.value) {
+
+      clippBoard = document.getElementById('clippboard')!;
 
       copied.value = false
 
@@ -103,7 +104,10 @@ onMounted(() => {
         highlightedElement.style.border = '';
       }
 
-      clippBoard.style.display = 'none'
+      if (clippBoard) {
+
+        clippBoard.style.display = 'none'
+      }
     }
   })
 
@@ -119,10 +123,11 @@ onMounted(() => {
 
   chrome.runtime?.onMessage.addListener(async (message) => {
     if (message['command'] === 'open') {
-      isActive.value = true
+
+      isActive.value = !isActive.value
       closeHover.value = false
 
-      toggleEvents(false)
+      toggleEvents(isActive.value ? false : true)
     }
   })
 })

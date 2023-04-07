@@ -1,5 +1,3 @@
-console.log('he')
-
 
 chrome.action.onClicked.addListener(async (tab: chrome.tabs.Tab) => {
   if (tab.id) {
