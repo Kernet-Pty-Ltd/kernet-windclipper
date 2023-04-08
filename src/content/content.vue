@@ -127,6 +127,7 @@ onMounted(() => {
       isActive.value = !isActive.value
       closeHover.value = false
 
+
       toggleEvents(isActive.value ? false : true)
     }
   })
