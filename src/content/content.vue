@@ -1,20 +1,21 @@
 <template>
   <div v-if="isActive"
-    class="wcp-fixed wcp-bg-gray-500 wcp-cursor-pointer wcp-shadow-md wcp-flex wcp-justify-center wcp-items-center wcp-text-white wcp-rounded wcp-p-4  wcp-h-4 wcp-top-6 wcp-right-6 wcp-z-[10000]"
+    class="wcp-fixed wcp-bg-gray-500 wcp-cursor-pointer wcp-shadow-md wcp-flex wcp-justify-center wcp-items-center wcp-text-white wcp-rounded wcp-p-4 wcp-h-4 wcp-top-6 wcp-right-6 wcp-z-[10000]"
     @mouseleave="onCloseHover(false)" @click="close" @mouseover="onCloseHover(true)">
     Exit windclipper
+
   </div>
   <div v-if="isActive" id="clippboard"
-    class="wcp-absolute wcp-hidden iwcp-flex wcp-flex-col wcp-border wcp-border-indigo-300 wcp-space-y-1 wcp-z-[10000] wcp-w-96 wcp-min-h-24 wcp-shadow wcp-rounded wcp-backdrop-blur wcp-bg-indigo-500/5">
+    class="wcp-absolute wcp-hidden iwcp-flex wcp-flex-col wcp-border wcp-border-indigo-300 wcp-space-y-1 wcp-z-[10000] wcp-w-96 wcp-min-h-24 wcp-shadow-lg wcp-rounded wcp-backdrop-blur-3xl wcp-bg-indigo-500/5">
 
     <div class="wcp-flex wcp-border-b wcp-border-indigo-300 wcp-py-3 wcp-px-6">
 
       <p class="wcp-flex-1 wcp-font-bold">
         {{ `<${name}>` }}
       </p>
-      <p class="wcp-text-gray-400"> {{ !copied ? 'click to copy' : 'copied to clipboard' }}</p>
+      <p class="wcp-text-gray-400 wcp-font-bold"> {{ !copied ? 'click to copy' : 'copied to clipboard' }}</p>
     </div>
-    <div class="wcp-text-green-500 wcp-font-bold wcp-pb-3 wcp-px-6">
+    <div class="wcp-text-gray-500 wcp-font-bold wcp-pb-3 wcp-px-6">
       {{ classes }}
     </div>
   </div>
@@ -39,25 +40,8 @@ const onCloseHover = (toggle = false) => {
 
 const close = () => {
   isActive.value = false
-  toggleEvents(true)
 }
 
-const toggleEvents = (toggle = false) => {
-  // Get all the button and a elements from the body
-  const buttons = document.body.getElementsByTagName('button');
-  const links = document.body.getElementsByTagName('a');
-
-  // Convert the HTMLCollection to an array to use forEach
-  Array.from(buttons).forEach(button => {
-    // Set the pointerEvents property to 'none'
-    button.style.pointerEvents = toggle ? 'auto' : 'none';
-  });
-
-  Array.from(links).forEach(link => {
-    // Set the pointerEvents property to 'none'
-    link.style.pointerEvents = toggle ? 'auto' : 'none';
-  });
-}
 
 onMounted(() => {
 
@@ -105,7 +89,6 @@ onMounted(() => {
       }
 
       if (clippBoard) {
-
         clippBoard.style.display = 'none'
       }
     }
@@ -113,6 +96,9 @@ onMounted(() => {
 
   // Click event outside of mousemove event handler
   window.addEventListener('click', (event) => {
+    if (isActive.value) {
+      event.preventDefault()
+    }
 
     if (classes.value.length > 0 && isActive.value && !closeHover.value) {
       navigator.clipboard.writeText(classes.value.toString());
@@ -123,12 +109,8 @@ onMounted(() => {
 
   chrome.runtime?.onMessage.addListener(async (message) => {
     if (message['command'] === 'open') {
-
       isActive.value = !isActive.value
       closeHover.value = false
-
-
-      toggleEvents(isActive.value ? false : true)
     }
   })
 })
